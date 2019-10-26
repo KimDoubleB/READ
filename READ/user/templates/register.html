@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contents %}
+<!-- Navbar Menu  ---->
+<section id="nav-bar">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/.">
+        <img src="{% static 'images/webiz-logo.png'%}" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-bars"></i>
+        </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Sign in</a>
+            </li> 
+            <li class="nav-item">
+                <a class="nav-link" href="/register">Sign up</a>
+            </li>
+        </ul>
+    </div>
+    </nav>
+</section>
+
+<!--- Sign in Section ------>
+<section id="about">
+    <div class="container">
+    <h3 class="title text-center">Sign Up</h3>
+    <div class="row">
+        <div class="col-md-6 about">
+            <div class="row mt-5">
+                <div class="col-12" role="alert">
+                    {{ error }}
+                    <!-- 이렇게 적어줌으로써 view에서 오류 메시지를 render로 전송하고 이를 이렇게 받아서 html로 보여줄 수 있다. -->
+                </div>
+                <br><br>
+                <div class="col-12">
+                    <form method="POST" action=".">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}"> {{ field.label }}</label>
+                            <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}"
+                                placeholder="{{ field.label }}" name="{{ field.name }}" />
+                        </div>
+                        {% if field.errors %}
+                        <div class="alert alert-danger" role="alert">
+                                {{ field.errors }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <br>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">회원가입</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <img src="{% static 'svg/undraw_mobile_marketing_iqbr.svg'%}" class="img-fluid" alt="">
+        </div>
+    </div>
+    </div>
+</section>
+
+{% endblock %}

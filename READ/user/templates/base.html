@@ -1,0 +1,69 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>READ</title>
+    <meta name="description" content="">
+    <link rel="canonical" href="https://www.nameagency.com">
+    <meta property="og:url" content="https://www.nameagency.com">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static 'images/ico/apple-touch-icon-144.png' %}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'images/ico/apple-touch-icon-114.png' %}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'images/ico/apple-touch-icon-72.png' %}">
+    <link rel="apple-touch-icon-precomposed" href="{% static 'images/ico/apple-touch-icon-57.png' %}">
+
+    {% block header %}
+    {% endblock %}
+</head>
+<body>
+    {% block contents %}
+    {% endblock %}
+
+    <!-- Footer ------>
+    <section id="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4 footer-box">
+              <img src="{% static 'images/READ.png'%}" alt="">
+              <p>New video service, READ.</p>
+            </div>
+            <div class="col-md-4 footer-box">
+                <p id="contact"><b>OUR OFFICE</b></p>
+                <p><i class="fa fa-map-marker"></i>Seongnam-si, Gyeonggi-do</p>
+                <p><i class="fa fa-phone"></i>+82 10 7713 3440</p>
+                <p><i class="fa fa-envelope-o"></i>tree9295@gmail.com</p>
+            </div>
+            <div class="col-md-4 footer-box">
+                <div id="social">
+                    <p>Find Us On Social Media</p>
+                       <div class="social-icons">
+                          <a href="#" class="svg-icons"><img src="{% static 'svg/facebook-logo.svg'%}" alt=""></a>
+                          <a href="#" class="svg-icons"><img src="{% static 'svg/instagram_.svg'%}" alt=""></a>
+                          <a href="#" class="svg-icons"><img src="{% static 'svg/twitter-logo.svg'%}" alt=""></a>
+                          <a href="#" class="svg-icons"><img src="{% static 'svg/whatsapp.svg'%}" alt=""></a>
+                       </div>
+                </div>
+            </div>
+            <div class="col-md-6 ">
+              <p class="copyright">Copyright © 2019. All rights reserved</p>
+            </div>
+          </div>
+          <br>
+        </div>
+    </section>
+    <!--- Smooth Scroll js ---------->
+    <script type="text/javascript" src="{% static 'js/smooth-scroll.js'%}"></script>
+    <script>
+	    var scroll = new SmoothScroll('a[href*="#"]');
+    </script>
+</body>
+
+</html>
