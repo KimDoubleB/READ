@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'user',
     'video',
+    'subscribe',
 ]
 
 MIDDLEWARE = [
