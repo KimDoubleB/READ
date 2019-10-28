@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<!-- Navbar Menu  -->
+<section id="nav-bar">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/.">
+        <img src="{% static 'images/webiz-logo.png'%}" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-bars"></i>
+        </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/video">Video</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/subscribe">Subscribe</a>
+        </li> 
+        </ul>
+    </div>
+    </nav>
+</section>
+
+<br><br><br>
+
+<!--- Video list ---->
+<section id="video">
+    <div class="container text-center">
+    <h3 class="title text-center">VIDEO</h3>
+    <br>
+    <div class="row mt-5">
+        <div class="col-12">
+            <table class="table table-light">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">비디오 제목</th>
+                        <th scope="col">개수</th>
+                        <th scope="col">등록날짜</th>
+                    </tr>
+                </thead>
+                <tbody class="text-dark">
+                    {% for video in video_list %}
+                    <tr>
+                        <th scope="row">{{ video.id }}</th>
+                        <th><a href="/video/{{ video.id }}">{{ video.name }}</a></th>
+                        <th>{{ video.playlist }} 개</th>
+                        <th>{{ video.register_date|date:'Y-m-d H:i' }}</th>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+    <button type="button" class="btn btn-primary" onclick="location.href='/video/create/'">Add video '접근권한수정필'</button>
+    </div>
+</section>
+
+<br><br><br>
+
+{% endblock %}

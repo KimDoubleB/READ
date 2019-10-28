@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header %}
+{% comment %} summernote 적용 - description {% endcomment %}
+
+<!-- include libraries(jQuery, bootstrap) -->
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
+
+<!-- include summernote css/js -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#id_description').summernote({
+            height: 200
+        });
+    });
+</script>
+{% endblock %}
+
+
+{% block contents %}
+<!-- Navbar Menu  ---->
+<section id="nav-bar">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/.">
+        <img src="{% static 'images/webiz-logo.png'%}" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-bars"></i>
+        </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/video">Video</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/subscribe">Subscribe</a>
+        </li> 
+        </ul>
+    </div>
+    </nav>
+</section>
+
+<br><br><br>
+
+<!--- add Video  ---->
+<section id="videoAdd">
+    <div class="container">
+    <h3 class="title text-center">ADD VIDEO</h3>
+    <br>
+    <div class="row mt-5">
+        <div class="col-12" role="alert">
+            {{ error }}
+        </div>
+        <br><br>
+        <div class="col-12">
+            <form method="POST" action="." enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}"> {{ field.label }}</label>
+                    {% ifequal field.name 'description' %}
+                    <textarea class="form-control" name="{{ field.name }}" id="{{ field.id_for_label }}"></textarea>
+                    {% else %}
+                    <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}"
+                        placeholder="{{ field.label }}" name="{{ field.name }}" />
+                    {% endifequal %}
+                </div>
+                {% if field.errors %}
+                <div class="alert alert-danger" role="alert">
+                        {{ field.errors }}
+                </div>
+                {% endif %}
+                {% endfor %}
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">등록</button>
+                </div>
+                <p></p>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-outline-danger" onclick="location.href='javascript:history.back()'">뒤로가기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+</section>
+
+<br><br><br>
+
+{% endblock %}
