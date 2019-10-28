@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Subscribe
 
-# Register your models here.
+class SubscribeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'video', )
+
+admin.site.register(Subscribe, SubscribeAdmin)
