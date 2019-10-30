@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load static %}
+{% block contents %}
+<!-- Navbar Menu  -->
+<section id="nav-bar">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/.">
+        <img src="{% static 'images/webiz-logo.png'%}" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-bars"></i>
+        </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/video">Video</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/subscribe">Subscribe</a>
+        </li> 
+        </ul>
+    </div>
+    </nav>
+</section>
+
+<br><br><br>
+
+<!--- Video detail ---->
+<section id="videoDetail">
+    <div class="container">
+    <h3 class="title text-center">VIDEO DETAIL</h3>
+    <br>
+    
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card" style="width: 100%;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ video.name }}</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                {% ifequal visible 1 %}
+                    <li class="list-group-item list-group-item-primary">
+                        <b>구독</b>
+                        <p></p>
+                        <form method="POST" action="/subscribe/create/">
+                            {% csrf_token %}
+                            {% for field in form %}
+                            <div class="form-group">
+                                {% ifnotequal field.name 'video' %}
+                                <label for="{{ field.id_for_label }}"> {{ field.label }}</label>
+                                {% endifnotequal %}
+                                <input type="{{ field.field.widget.input_type }}" class="form-control"
+                                    id="{{ field.id_for_label }}" placeholder="{{ field.label }}" name="{{ field.name }}"
+                                    value="{% ifequal field.name 'video' %}{{ video.id }}{% endifequal %}" />
+                            </div>
+                            {% if field.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ field.errors }}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            <button type="submit" class="btn btn-outline-primary">구독하기</button>
+                        </form>
+                    </li>
+                {% endifequal %}
+                    <!--             
+                |intcomma >>> 3자리마다 점찍혀서 숫자가 잘 보이도록 한다.
+                |safe >>> 데이터 자체가 html 코드로 바로 적용되서 보이도록
+                -> 즉, 이미지가 들어올 때, 이미지 태그가 보여지지 않고 이미지 태그가 html 코드로 적용되어 보여줘야하기 때문에 사용된다. 
+            -->
+                    <li class="list-group-item">개수: {{ video.playlist|intcomma }} 개</li>
+                    <li class="list-group-item">등록날짜: {{ video.register_date|date:'Y-m-d H:i' }}</li>
+                    <li class="list-group-item">{{ video.description|safe }}</li>
+                </ul>
+            </div>
+            <p></p>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-primary" onclick="location.href='./watch'">시청</button>
+            </div>
+            <p></p>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-outline-danger" onclick="location.href='javascript:history.back()'">뒤로가기</button>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</section>
+
+<br><br><br>
+
+
+
+
+
+
+{% endblock %}

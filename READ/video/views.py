@@ -9,6 +9,8 @@ from django.views.generic.base import HttpResponse, HttpResponseRedirect, View
 from django.views.generic.edit import FormView
 
 from user.models import READ_User
+from subscribe.models import Subscribe
+from subscribe.forms import RegisterForm as SubscribeForm
 
 from .forms import RegisterForm
 from .models import Video
@@ -62,3 +64,25 @@ class VideoList(ListView):
     model = Video
     template_name = 'video.html'
     context_object_name = 'video_list'
+
+# Login required
+class VideoDetail(DetailView):
+    template_name = 'video_detail.html'
+    queryset = Video.objects.all()
+    context_object_name = 'video'
+
+    # # OrderForm을 detail template에 전달해주는 곳
+    # # 이렇게 detailView 내에 있는 함수인 get_content_data를 통해서 원하는 form을 또 전달할 수 있다.
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print('user', self.request.session.get('user'))
+        subs = Subscribe.objects.filter(user = READ_User.objects.get(username=self.request.session.get('user')))
+        context['visible'] = 1
+
+        for sub in subs:
+            if sub.video == context['video']:
+                context['visible'] = 0
+                break
+
+        context['form'] = SubscribeForm(self.request) # session 접근을 위해 request를 넘겨준다.        
+        return context
