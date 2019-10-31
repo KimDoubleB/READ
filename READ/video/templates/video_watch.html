@@ -106,6 +106,10 @@ var snapshot = document.getElementById('snapshot');
 
 var timeout = null
 
+function now(){
+    return new Date().getTime();
+}
+
 function dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -122,9 +126,8 @@ function captureWebcam(){
   context.drawImage(player, 0, 0, snapshot.width, 
       snapshot.height);
 
-  // username 받아 와서 image 파일 이름으로 사용하던가,
-  // image 파일 이름에 규칙성이 있어야 할 것 같다.
-  var cover = dataURLtoFile(snapshot.toDataURL("image/png"), 'a.png')  
+  // 이미지 파일 이름 현재 시간의 milliseconds로 저장.
+  var cover = dataURLtoFile(snapshot.toDataURL("image/png"), now().toString().concat(".png"))
   var form = new FormData();
   form.append("cover", cover);
 
