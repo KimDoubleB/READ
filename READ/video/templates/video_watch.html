@@ -79,9 +79,8 @@
         <p class="lead">{{ video.description|safe }}</p>
         
         <br>
-        <h1> Video You </h1>
-        <video id="camera" autoplay=""></video>
-        <canvas id="snapshot" width=320 height=240></canvas>
+        <video id="camera" autoplay="" hidden></video>
+        <canvas id="snapshot" width=640 height=480 hidden></canvas>
 
       </main>
       <br>
@@ -90,8 +89,7 @@
       </div>
     </div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
+    <!-- Bootstrap core JavaScript -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
@@ -105,6 +103,8 @@ var vid = document.getElementById("vid");
 // ref: https://developers.google.com/web/fundamentals/media/capturing-images/?hl=ko
 var player = document.getElementById('camera'); 
 var snapshot = document.getElementById('snapshot');
+
+var timeout = null
 
 function dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
@@ -136,7 +136,14 @@ function captureWebcam(){
     "processData": false,
     "contentType": false,
     "mimeType": "multipart/form-data",
-    "data": form
+    "data": form,
+    success: function(){
+      $('.result').html();
+    },
+    complete: function(){
+      // 1 sec --> upload
+      timeout = setTimeout(captureWebcam, 1000);
+    }
   }
 
   $.ajax(settings).done(function (response) {
@@ -146,13 +153,13 @@ function captureWebcam(){
 // play button onclick function
 function playVid() {
   vid.play(); // play the video(media)
-
   captureWebcam()
 }
 
 // stop button onclick function
 function pauseVid() { 
-  vid.pause(); 
+  vid.pause();
+  clearTimeout(timeout)
 }
 
 var handleSuccess = function(stream) {
