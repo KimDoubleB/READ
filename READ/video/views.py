@@ -1,6 +1,7 @@
 import os
 import random
 import string
+from wsgiref.util import FileWrapper
 
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
@@ -8,9 +9,9 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.base import HttpResponse, HttpResponseRedirect, View
 from django.views.generic.edit import FormView
 
-from user.models import READ_User
-from subscribe.models import Subscribe
 from subscribe.forms import RegisterForm as SubscribeForm
+from subscribe.models import Subscribe
+from user.models import READ_User
 
 from .forms import RegisterForm
 from .models import Video
@@ -86,3 +87,24 @@ class VideoDetail(DetailView):
 
         context['form'] = SubscribeForm(self.request) # session 접근을 위해 request를 넘겨준다.        
         return context
+
+class VideoWatch(View):
+    template_name = 'video_watch.html'
+
+    def get(self, request, pk):
+        #fetch video from DB by ID
+        video = Video.objects.get(id=pk)
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        video.path = '/./get_video/'+video.path
+        context = {'video':video}
+
+        return render(request, self.template_name, context)
+
+
+class VideoFileView(View):
+    def get(self, request, file_name):
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        file = FileWrapper(open(BASE_DIR+'/'+file_name,'rb'))
+        response = HttpResponse(file, content_type='video/mp4')
+        response['Content-Disposition'] = 'attachment; filename={}'.format(file_name)
+        return response

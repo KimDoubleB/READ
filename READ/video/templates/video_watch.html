@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load static %}
+
+{% block header %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/7.3.0/adapter.min.js"></script>
+<script type="text/javascript">
+    function gotStream(stream) {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        var audioContext = new AudioContext();
+
+        // Create an AudioNode from the stream
+        var mediaStreamSource = audioContext.createMediaStreamSource(stream);
+
+        // Connect it to destination to hear yourself
+        // or any other node for processing!
+        mediaStreamSource.connect(audioContext.destination);
+        var video = document.getElementById('camera');
+        var videoTracks = stream.getVideoTracks();
+        window.stream = stream; // make variable available to browser console
+        video.srcObject = stream;
+    }
+    function onfail(error) {
+        console.log("permission not granted or system don't have media devices."+error.name);
+    }
+    navigator.getUserMedia({audio:true,video:true}, gotStream,onfail);
+</script>
+{% endblock %}
+
+{% block contents %}
+<!-- Navbar Menu  -->
+<section id="nav-bar">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/.">
+        <img src="{% static 'images/webiz-logo.png'%}" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-bars"></i>
+        </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/video">Video</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/subscribe">Subscribe</a>
+        </li> 
+        </ul>
+    </div>
+    </nav>
+</section>
+
+<br><br><br>
+
+<!--- Video detail ---->
+<section id="videoDetail">
+    <div class="container">
+    <h3 class="title text-center">{{ video.name }}</h3>
+    <br>
+    <div class="text-center">
+    <div class="cover-container d-flex p-3 mx-auto flex-column">
+      <main role="main" class="inner cover">
+        <br>                
+        <video id="vid" width="800">
+            <source src="{{ video.path }}" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+        <br><br><br>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary btn-sm" onclick="playVid()">재생</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="pauseVid()">멈춤</button>
+        </div>
+        <p class="lead">{{ video.description|safe }}</p>
+        
+        <br>
+        <h1> Video You </h1>
+        <video id="camera" autoplay=""></video>
+        <canvas id="snapshot" width=320 height=240></canvas>
+
+      </main>
+      <br>
+      <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-outline-danger" onclick="location.href='javascript:history.back()'">뒤로가기</button>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    </div>
+    <br><br><br>
+</section>
+
+<script> 
+var vid = document.getElementById("vid"); 
+
+// ref: https://developers.google.com/web/fundamentals/media/capturing-images/?hl=ko
+var player = document.getElementById('camera'); 
+var snapshotCanvas = document.getElementById('snapshot');
+
+// play button onclick function
+function playVid() {
+  vid.play(); // play the video(media)
+
+  // video that is related by data under here is camera view video
+  var context = snapshot.getContext('2d');
+  // Draw the video frame to the canvas.
+  context.drawImage(player, 0, 0, snapshotCanvas.width, 
+      snapshotCanvas.height);
+}
+
+// stop button onclick function
+function pauseVid() { 
+  vid.pause(); 
+}
+
+var handleSuccess = function(stream) {
+  // Attach the video stream to the video element and autoplay.
+  player.srcObject = stream;
+};
+
+navigator.mediaDevices.getUserMedia({video: true})
+    .then(handleSuccess);
+
+ 
+</script> 
+{% endblock %}
