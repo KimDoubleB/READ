@@ -17,7 +17,7 @@ Including another URLconf
 # TODO: Subdivided into several url files of each app.
 from django.contrib import admin
 from django.urls import path
-from user.views import RegisterView, LoginView, index, logout
+from user.views import RegisterView, LoginView, index, logout, login_API, register_API
 from video.views import VideoCreate, VideoList, VideoDetail, VideoWatch, VideoFileView
 from subscribe.views import SubscribeCreate, SubscribeList
 
@@ -34,4 +34,6 @@ urlpatterns = [
     path('get_video/<file_name>/', VideoFileView.as_view()),
     path('subscribe/', SubscribeList.as_view()),
     path('subscribe/create/', SubscribeCreate.as_view()),
+    path('api/login/', login_API),
+    path('api/register/', register_API), 
 ]
