@@ -74,7 +74,6 @@
         <br><br><br>
         <div class="btn-group">
           <button type="button" class="btn btn-primary btn-sm" onclick="playVid()">재생</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="captureWebcam()">업로드</button>
           <button type="button" class="btn btn-secondary btn-sm" onclick="pauseVid()">멈춤</button>
         </div>
         <p class="lead">{{ video.description|safe }}</p>
@@ -147,7 +146,7 @@ function captureWebcam(){
 // play button onclick function
 function playVid() {
   vid.play(); // play the video(media)
-  
+
   captureWebcam()
 }
 
