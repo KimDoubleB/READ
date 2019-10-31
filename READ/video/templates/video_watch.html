@@ -74,6 +74,7 @@
         <br><br><br>
         <div class="btn-group">
           <button type="button" class="btn btn-primary btn-sm" onclick="playVid()">재생</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="captureWebcam()">업로드</button>
           <button type="button" class="btn btn-secondary btn-sm" onclick="pauseVid()">멈춤</button>
         </div>
         <p class="lead">{{ video.description|safe }}</p>
@@ -98,23 +99,56 @@
     </div>
     <br><br><br>
 </section>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script> 
 var vid = document.getElementById("vid"); 
 
 // ref: https://developers.google.com/web/fundamentals/media/capturing-images/?hl=ko
 var player = document.getElementById('camera'); 
-var snapshotCanvas = document.getElementById('snapshot');
+var snapshot = document.getElementById('snapshot');
 
-// play button onclick function
-function playVid() {
-  vid.play(); // play the video(media)
+function dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+}
 
+function captureWebcam(){
   // video that is related by data under here is camera view video
   var context = snapshot.getContext('2d');
   // Draw the video frame to the canvas.
-  context.drawImage(player, 0, 0, snapshotCanvas.width, 
-      snapshotCanvas.height);
+  context.drawImage(player, 0, 0, snapshot.width, 
+      snapshot.height);
+
+  // username 받아 와서 image 파일 이름으로 사용하던가,
+  // image 파일 이름에 규칙성이 있어야 할 것 같다.
+  var cover = dataURLtoFile(snapshot.toDataURL("image/png"), 'a.png')  
+  var form = new FormData();
+  form.append("cover", cover);
+
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://127.0.0.1:8000/upload/",
+    "method": "POST",
+    "processData": false,
+    "contentType": false,
+    "mimeType": "multipart/form-data",
+    "data": form
+  }
+
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+  });
+}
+// play button onclick function
+function playVid() {
+  vid.play(); // play the video(media)
+  
+  captureWebcam()
 }
 
 // stop button onclick function
