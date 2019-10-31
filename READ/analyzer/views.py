@@ -8,16 +8,6 @@ from django.views.decorators.csrf import csrf_exempt
 def image_view(request):
     template ='image.html'
     form = ImageForm(request.POST, request.FILES)
-    if 'cover' in request.POST:
-        print(request.POST['cover'])
-        print("****************")
-        print(request.FILES)
-
-    else:
-        print(request.POST)
-        print("****************")
-        print(request.FILES)
-
     if form.is_valid():
         form.save()
         return redirect('/')
