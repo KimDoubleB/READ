@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from user.views import RegisterView, LoginView, index, logout, login_API, register_API
-from video.views import VideoCreate, VideoList, VideoDetail, VideoWatch, VideoFileView
+from video.views import VideoCreate, VideoList, VideoDetail, VideoWatch, VideoFileView, VideoListAPI, VideoDetailAPI
 from subscribe.views import SubscribeCreate, SubscribeList
 
 urlpatterns = [
@@ -35,5 +35,7 @@ urlpatterns = [
     path('subscribe/', SubscribeList.as_view()),
     path('subscribe/create/', SubscribeCreate.as_view()),
     path('api/login/', login_API),
-    path('api/register/', register_API), 
+    path('api/register/', register_API),
+    path('api/video/', VideoListAPI.as_view()),
+    path('api/video/<int:pk>/', VideoDetailAPI.as_view()),
 ]

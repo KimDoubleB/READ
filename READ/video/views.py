@@ -8,6 +8,12 @@ from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import HttpResponse, HttpResponseRedirect, View
 from django.views.generic.edit import FormView
+from rest_framework import generics, mixins
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED,
+                                   HTTP_400_BAD_REQUEST)
 
 from subscribe.forms import RegisterForm as SubscribeForm
 from subscribe.models import Subscribe
@@ -15,6 +21,7 @@ from user.models import READ_User
 
 from .forms import RegisterForm
 from .models import Video
+from .serializers import VideoSerializer
 
 
 class VideoCreate(View):
@@ -72,8 +79,8 @@ class VideoDetail(DetailView):
     queryset = Video.objects.all()
     context_object_name = 'video'
 
-    # # OrderForm을 detail template에 전달해주는 곳
-    # # 이렇게 detailView 내에 있는 함수인 get_content_data를 통해서 원하는 form을 또 전달할 수 있다.
+    # OrderForm을 detail template에 전달해주는 곳
+    # 이렇게 detailView 내에 있는 함수인 get_content_data를 통해서 원하는 form을 또 전달할 수 있다.
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         print('user', self.request.session.get('user'))
@@ -108,3 +115,67 @@ class VideoFileView(View):
         response = HttpResponse(file, content_type='video/mp4')
         response['Content-Disposition'] = 'attachment; filename={}'.format(file_name)
         return response
+
+
+@permission_classes((IsAuthenticated,))
+class VideoListAPI(generics.GenericAPIView, mixins.ListModelMixin):
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        return Video.objects.all().order_by('id')
+
+    '''
+    게시물 리스트 조회
+    /api/video/
+    '''
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    '''
+    게시물 생성
+    /api/video/
+    '''
+    def post(self, request, format=None):
+        serializer = VideoSerializer(data=request.data)
+        print(request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=HTTP_201_CREATED)
+        return Response({'error': 'Please provide name and playlist and description'}, 
+                        status=HTTP_400_BAD_REQUEST)
+
+@permission_classes((IsAuthenticated,))
+class VideoDetailAPI(generics.GenericAPIView, mixins.RetrieveModelMixin):
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        return Video.objects.all().order_by('id')
+    
+    '''
+    특정 게시물 조회
+    /api/video/{pk}/
+    '''
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    '''
+    특정 게시물 수정
+    /api/video/{pk}/
+    '''
+    def put(self, request, pk, format=None):
+        video = self.get_object()
+        serializer = VideoSerializer(video, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=HTTP_200_OK)
+        return Response({'error': '올바르지 않은 값이 입력되었습니다.'}, 
+                        status=HTTP_400_BAD_REQUEST)
+    
+    '''
+    특정 게시물 삭제
+    /api/video/{pk}/
+    '''
+    def delete(self, request, pk, format=None):
+        video = self.get_object()
+        video.delete()
+        return Response(status = HTTP_200_OK)
