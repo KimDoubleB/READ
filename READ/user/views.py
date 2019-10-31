@@ -1,22 +1,19 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import FormView
-
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import (
-    HTTP_400_BAD_REQUEST,
-    HTTP_404_NOT_FOUND,
-    HTTP_200_OK
-)
+from rest_framework.status import (HTTP_200_OK, HTTP_400_BAD_REQUEST,
+                                   HTTP_404_NOT_FOUND)
 
+from .forms import LoginForm, RegisterForm
 from .models import READ_User
-from .forms import RegisterForm, LoginForm
+
 
 @csrf_exempt
 def index(request):
