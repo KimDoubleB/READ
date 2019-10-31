@@ -51,10 +51,11 @@ class VideoCreate(View):
             # file uploading
             random_char = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
             path = random_char+file.name
-            fs = FileSystemStorage(location = os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            addr = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+"\media"
+            fs = FileSystemStorage(location = addr)
             filename = fs.save(path, file)
             file_url = fs.url(filename)
-            print(filename, file_url)
+
             # add data to Video DB
             video = Video(
                 name = form.data.get('name'),
@@ -111,7 +112,7 @@ class VideoWatch(View):
 class VideoFileView(View):
     def get(self, request, file_name):
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        file = FileWrapper(open(BASE_DIR+'/'+file_name,'rb'))
+        file = FileWrapper(open(BASE_DIR+'/media/'+file_name,'rb'))
         response = HttpResponse(file, content_type='video/mp4')
         response['Content-Disposition'] = 'attachment; filename={}'.format(file_name)
         return response
