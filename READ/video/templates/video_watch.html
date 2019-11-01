@@ -96,20 +96,31 @@
     </div>
     <br><br><br>
 </section>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
 <script> 
 var vid = document.getElementById("vid"); 
+var timeout = null
+
+// When video is finsihed, uploading stops.
+vid.onended = function(){
+  clearTimeout(timeout)
+}
+
 
 // ref: https://developers.google.com/web/fundamentals/media/capturing-images/?hl=ko
 var player = document.getElementById('camera'); 
 var snapshot = document.getElementById('snapshot');
 
-var timeout = null
-
-function now(){
-    return new Date().getTime();
+// make name of image file (current date time '-' current video time)
+function imageName(){
+  var now = new Date().getTime().toString();
+  var current = vid.currentTime.toFixed(2).toString();
+  return now + "-" + current;
 }
 
+// dataURL(base64) converts to image file.
 function dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -126,11 +137,11 @@ function captureWebcam(){
   context.drawImage(player, 0, 0, snapshot.width, 
       snapshot.height);
 
-  // 이미지 파일 이름 현재 시간의 milliseconds로 저장.
-  var cover = dataURLtoFile(snapshot.toDataURL("image/png"), now().toString().concat(".png"))
+  var cover = dataURLtoFile(snapshot.toDataURL("image/png"), imageName() + ".png")
   var form = new FormData();
   form.append("cover", cover);
 
+  // ajax (POST)
   var settings = {
     "async": true,
     "crossDomain": true,
@@ -153,16 +164,17 @@ function captureWebcam(){
     console.log(response);
   });
 }
+
 // play button onclick function
 function playVid() {
-  vid.play(); // play the video(media)
-  captureWebcam()
+  vid.play();     // play the video
+  captureWebcam() // uploading starts.
 }
 
 // stop button onclick function
 function pauseVid() { 
-  vid.pause();
-  clearTimeout(timeout)
+  vid.pause();          // pause the video
+  clearTimeout(timeout) // uploading stops.
 }
 
 var handleSuccess = function(stream) {
