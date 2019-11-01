@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import User_Image
 
-# Register your models here.
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('cover', )
+
+admin.site.register(User_Image, ImageAdmin)
