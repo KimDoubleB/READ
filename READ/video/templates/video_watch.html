@@ -67,7 +67,7 @@
     <div class="cover-container d-flex p-3 mx-auto flex-column">
       <main role="main" class="inner cover">
         <br>                
-        <video id="vid" width="800">
+        <video id="vid" width="800" controls>
             <source src="{{ video.path }}" type="video/mp4">
         Your browser does not support the video tag.
         </video>
@@ -165,16 +165,22 @@ function captureWebcam(){
   });
 }
 
-// play button onclick function
+// play button onclick function4
+vid.onplay = function(){
+  captureWebcam(); // uploading starts.
+}
 function playVid() {
   vid.play();     // play the video
-  captureWebcam() // uploading starts.
+  captureWebcam(); // uploading starts.
 }
 
 // stop button onclick function
+vid.onpause = function(){
+  clearTimeout(timeout);
+}
 function pauseVid() { 
   vid.pause();          // pause the video
-  clearTimeout(timeout) // uploading stops.
+  clearTimeout(timeout); // uploading stops.
 }
 
 var handleSuccess = function(stream) {
