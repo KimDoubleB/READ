@@ -108,11 +108,16 @@ vid.onended = function(){
 var player = document.getElementById('camera'); 
 var snapshot = document.getElementById('snapshot');
 
+// make current time of video
+function videoCurrentTime(){
+  var current = vid.currentTime.toFixed(2).toString();
+  return current;
+}
+
 // make name of image file (current date time '-' current video time)
 function imageName(){
   var now = new Date().getTime().toString();
-  var current = vid.currentTime.toFixed(2).toString();
-  return now + "-" + current;
+  return now + "-" + videoCurrentTime();
 }
 
 // dataURL(base64) converts to image file.
@@ -132,8 +137,10 @@ function captureWebcam(){
   context.drawImage(player, 0, 0, snapshot.width, 
       snapshot.height);
 
+  var name = videoCurrentTime();
   var cover = dataURLtoFile(snapshot.toDataURL("image/png"), imageName() + ".png")
   var form = new FormData();
+  form.append("name", name);
   form.append("cover", cover);
 
   // ajax (POST)
