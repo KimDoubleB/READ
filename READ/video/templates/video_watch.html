@@ -72,12 +72,7 @@
         Your browser does not support the video tag.
         </video>
         <br><br><br>
-        <div class="btn-group">
-          <button type="button" class="btn btn-primary btn-sm" onclick="playVid()">재생</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="pauseVid()">멈춤</button>
-        </div>
-        <p class="lead">{{ video.description|safe }}</p>
-        
+        <p class="lead">{{ video.description|safe }}</p>        
         <br>
         <video id="camera" autoplay="" hidden></video>
         <canvas id="snapshot" width=640 height=480 hidden></canvas>
@@ -165,21 +160,13 @@ function captureWebcam(){
   });
 }
 
-// play button onclick function4
+// play the video
 vid.onplay = function(){
   captureWebcam(); // uploading starts.
 }
-function playVid() {
-  vid.play();     // play the video
-  captureWebcam(); // uploading starts.
-}
 
-// stop button onclick function
+ // pause the video
 vid.onpause = function(){
-  clearTimeout(timeout);
-}
-function pauseVid() { 
-  vid.pause();          // pause the video
   clearTimeout(timeout); // uploading stops.
 }
 
