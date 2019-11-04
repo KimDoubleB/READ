@@ -115,9 +115,9 @@ function videoCurrentTime(){
 }
 
 // make name of image file (current date time '-' current video time)
-function imageName(){
+function dateCurrentTime(){
   var now = new Date().getTime().toString();
-  return now + "-" + videoCurrentTime();
+  return now;
 }
 
 // dataURL(base64) converts to image file.
@@ -137,11 +137,19 @@ function captureWebcam(){
   context.drawImage(player, 0, 0, snapshot.width, 
       snapshot.height);
 
-  var name = videoCurrentTime();
-  var cover = dataURLtoFile(snapshot.toDataURL("image/png"), imageName() + ".png")
+  var videoCurrent = videoCurrentTime();
+  var dateCurrent = dateCurrentTime();
+  var title = videoCurrent + "-" + dateCurrent + ".png";
+  var cover = dataURLtoFile(snapshot.toDataURL("image/png"), title);
+
   var form = new FormData();
-  form.append("name", name);
+  form.append("user", "{{ user }}" );
+  form.append("video", "{{ video.pk }}" );
+  form.append("currentTime", videoCurrent);
+  form.append("path", title);
+  form.append("reaction", "1")
   form.append("cover", cover);
+
 
   // ajax (POST)
   var settings = {

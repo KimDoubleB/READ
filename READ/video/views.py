@@ -102,9 +102,10 @@ class VideoWatch(View):
     def get(self, request, pk):
         #fetch video from DB by ID
         video = Video.objects.get(id=pk)
+        username = self.request.session.get('user')
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         video.path = '/./get_video/'+video.path
-        context = {'video':video}
+        context = {'user':username, 'video':video}
 
         return render(request, self.template_name, context)
 
