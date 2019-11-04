@@ -9,7 +9,7 @@ def image_view(request):
     template ='image.html'
     form = ImageForm(request.POST, request.FILES)
     if form.is_valid():
-        form.save()
+        print(request.FILES)
         return redirect('/')
 
     else:

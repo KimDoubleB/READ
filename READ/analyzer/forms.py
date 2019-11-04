@@ -1,7 +1,7 @@
 from django import forms
 from .models import User_Image
 
-class ImageForm(forms.ModelForm):
+class ImageForm(forms.Form):
     name = forms.CharField(
         error_messages={
             'required':'제목을 입력해주세요.'
@@ -15,7 +15,3 @@ class ImageForm(forms.ModelForm):
         },
         label='이미지'
     )
-
-    class Meta:
-        model = User_Image
-        fields = ['name', 'cover']
