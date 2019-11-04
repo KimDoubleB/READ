@@ -6,6 +6,4 @@ class ImageForm(forms.Form):
     video = forms.IntegerField()
     currentTime = forms.CharField()
     path = forms.CharField()
-    reaction = forms.CharField()
     cover = forms.ImageField()
-
