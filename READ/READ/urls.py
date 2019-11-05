@@ -20,7 +20,7 @@ from django.urls import path
 from user.views import RegisterView, LoginView, index, logout, login_API, register_API
 from video.views import VideoCreate, VideoList, VideoDetail, VideoWatch, VideoFileView, VideoListAPI, VideoDetailAPI
 from subscribe.views import SubscribeCreate, SubscribeList, SubscribeListAPI
-from analyzer.views import image_view
+from analyzer.views import image_view, result
 
 urlpatterns = [
     path('', index),
@@ -35,6 +35,7 @@ urlpatterns = [
     path('get_video/<file_name>/', VideoFileView.as_view()),
     path('subscribe/', SubscribeList.as_view()),
     path('subscribe/create/', SubscribeCreate.as_view()),
+    path('result/', result),
     path('upload/', image_view),
     path('api/login/', login_API),
     path('api/register/', register_API),

@@ -41,3 +41,7 @@ def image_view(request):
         'form' : form,
     }
     return render(request, template, context)
+
+def result(request):
+    # pass session data to template.
+    return render(request, 'analyze.html')
