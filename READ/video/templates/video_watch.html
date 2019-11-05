@@ -6,15 +6,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/7.3.0/adapter.min.js"></script>
 <script type="text/javascript">
     function gotStream(stream) {
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        var audioContext = new AudioContext();
 
-        // Create an AudioNode from the stream
-        var mediaStreamSource = audioContext.createMediaStreamSource(stream);
-
-        // Connect it to destination to hear yourself
-        // or any other node for processing!
-        mediaStreamSource.connect(audioContext.destination);
         var video = document.getElementById('camera');
         var videoTracks = stream.getVideoTracks();
         window.stream = stream; // make variable available to browser console
