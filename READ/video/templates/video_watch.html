@@ -158,7 +158,7 @@ function captureWebcam(){
     },
     complete: function(){
       // 3 sec --> upload
-      timeout = setTimeout(captureWebcam, 3000);
+      timeout = setTimeout(captureWebcam, 10000);
     }
   }
 
@@ -169,7 +169,7 @@ function captureWebcam(){
 
 // play the video
 vid.onplay = function(){
-  captureWebcam(); // uploading starts.
+  timeout = setTimeout(captureWebcam, 10000);
 }
 
  // pause the video
