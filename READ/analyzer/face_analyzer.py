@@ -1,16 +1,19 @@
 import math
 import os
+import pickle
 import sys
 from collections import OrderedDict
+import pandas as pd
 
 import cv2
 import imutils
 import numpy as np
+from django.core.files.storage import default_storage
 from imutils import face_utils
 
 import dlib
+
 from .models import User_Image
-from django.core.files.storage import default_storage
 
 FACIAL_ONLY = OrderedDict([
    ("right_eye", (36, 42)),
@@ -107,7 +110,7 @@ def analyze_image(user, video, currentTime, path, image):
   # initialize dlib's face detector (HOG-based) and then create
   # the facial landmark predictor
   detector = dlib.get_frontal_face_detector()
-  predictor = dlib.shape_predictor('./analyzer/shape_predictor_68_face_landmarks.dat')
+  predictor = dlib.shape_predictor('./analyzer/data/shape_predictor_68_face_landmarks.dat')
 
   FINAL_result = []
 
@@ -235,6 +238,12 @@ def analyze_image(user, video, currentTime, path, image):
           right_dist = dist_x(right, medium) / dist_x(left, right)
           FINAL_result.append(left_dist)
           FINAL_result.append(right_dist)
+    
+    xgb_model = pickle.load(open('./analyzer/data/xgb_reg.pkl', 'rb'))
+    columns = ['gaze', 'left_eye', 'right_eye', 'nose_left_ratio', 'nose_right_ratio', 'jaw_left_ratio', 'jaw_right_ratio']
+    present = pd.DataFrame([FINAL_result], columns = columns)
+    FINAL_result = xgb_model.predict(present)
+
   os.remove('./media/' + path)
 
   # save model
