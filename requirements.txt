@@ -1,6 +1,9 @@
-Django==2.2.5
+Django==2.2.8
 djangorestframework==3.10.3
 numpy
 pandas
 scikit-learn
 Pillow
+imutils
+dlib
+opencv-python
