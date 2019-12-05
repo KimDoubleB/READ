@@ -12,7 +12,7 @@ from .models import User_Image
 
 
 @csrf_exempt
-def image_view(request):
+def analyze_view(request):
     template ='image.html'
     form = ImageForm(request.POST, request.FILES)
     if form.is_valid():
