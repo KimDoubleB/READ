@@ -1,13 +1,14 @@
+import json
 import math
 import os
 import pickle
 import sys
 from collections import OrderedDict
-import pandas as pd
 
 import cv2
 import imutils
 import numpy as np
+import pandas as pd
 from django.core.files.storage import default_storage
 from imutils import face_utils
 
@@ -93,7 +94,17 @@ def get_gaze_ratio(eye_points, facial_landmarks, image, gray):
    #print('gaze_ratio', gaze_ratio)
    return gaze_ratio
 
-def analyze_image(user, video, currentTime, path, image):
+def makeJson(duration):
+  reaction = '{'
+  for time_sec in range(duration):
+    reaction += '"'+str(time_sec)+'": -5'
+    if duration-1 != time_sec:
+      reaction += ', '
+    else:
+      reaction += '}'
+  return json.loads(reaction)
+
+def analyze_image(user, video, currentTime, path, image, duration):
   image_file = default_storage.save('images/' + image.name, image)
 
 
@@ -242,16 +253,34 @@ def analyze_image(user, video, currentTime, path, image):
     xgb_model = pickle.load(open('./analyzer/data/xgb_reg.pkl', 'rb'))
     columns = ['gaze', 'left_eye', 'right_eye', 'nose_left_ratio', 'nose_right_ratio', 'jaw_left_ratio', 'jaw_right_ratio']
     present = pd.DataFrame([FINAL_result], columns = columns)
-    FINAL_result = xgb_model.predict(present)
+    FINAL_result = xgb_model.predict(present)[0]
 
+  # Remove personal information (images)
   os.remove('./media/' + path)
 
-  # save model
-  user_img = User_Image(
-      user = user,
-      video = video,
-      currentTime = currentTime,
-      path = path,
-      reaction = str(FINAL_result) # Temporary data (TODO: deep learning)
-  )
-  user_img.save()
+  # check if first access (User - Video)
+  if not User_Image.objects.filter(user=user, video=video).exists():
+    # define initial reaction values
+    init_reaction = makeJson(int(float(duration)/10))
+    
+    # put present reaction value
+    init_reaction[str(currentTime)] = str(FINAL_result)
+
+    # save model
+    user_img = User_Image(
+        user = user,
+        video = video,
+        currentTime = currentTime,
+        path = path,
+        reaction = str(init_reaction)
+    )
+    user_img.save()
+  else:
+    # get present data
+    present_user = User_Image.objects.get(user=user, video=video)
+    # change reaction data of current time.
+    present_reaction = json.loads(present_user.reaction.replace("'", "\""))
+    present_reaction[str(currentTime)] = str(FINAL_result)
+    # model change and save
+    present_user.reaction = str(present_reaction)
+    present_user.save()
