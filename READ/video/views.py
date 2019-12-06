@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED,
                                    HTTP_400_BAD_REQUEST)
 
+from analyzer.models import User_Image
 from subscribe.forms import RegisterForm as SubscribeForm
 from subscribe.models import Subscribe
 from user.models import READ_User
@@ -103,9 +104,16 @@ class VideoWatch(View):
         #fetch video from DB by ID
         video = Video.objects.get(id=pk)
         username = self.request.session.get('user')
+        user = READ_User.objects.get(username=username)
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         video.path = '/./get_video/'+video.path
-        context = {'user':username, 'video':video}
+
+        if not User_Image.objects.filter(user=user, video=video).exists():
+          user_reaction = None
+        else:
+          user_reaction = User_Image.objects.get(user=user, video=video)
+
+        context = {'user':username, 'video':video, 'user_reaction':user_reaction}
 
         return render(request, self.template_name, context)
 
