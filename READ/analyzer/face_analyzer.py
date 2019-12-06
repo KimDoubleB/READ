@@ -95,13 +95,13 @@ def get_gaze_ratio(eye_points, facial_landmarks, image, gray):
    return gaze_ratio
 
 def makeJson(duration):
-  reaction = '{'
+  reaction = '{ "duration": ' + str(duration) + ', "time": ['
   for time_sec in range(duration):
-    reaction += '"'+str(time_sec)+'": -5'
+    reaction += '-1'
     if duration-1 != time_sec:
       reaction += ', '
     else:
-      reaction += '}'
+      reaction += ']}'
   return json.loads(reaction)
 
 def analyze_image(user, video, currentTime, path, image, duration):
@@ -264,23 +264,21 @@ def analyze_image(user, video, currentTime, path, image, duration):
     init_reaction = makeJson(int(float(duration)/10))
     
     # put present reaction value
-    init_reaction[str(currentTime)] = str(FINAL_result)
+    init_reaction['time'][currentTime] = FINAL_result
 
     # save model
     user_img = User_Image(
         user = user,
         video = video,
-        currentTime = currentTime,
-        path = path,
-        reaction = str(init_reaction)
+        reaction = str(init_reaction).replace("'", "\"")
     )
     user_img.save()
   else:
     # get present data
     present_user = User_Image.objects.get(user=user, video=video)
     # change reaction data of current time.
-    present_reaction = json.loads(present_user.reaction.replace("'", "\""))
-    present_reaction[str(currentTime)] = str(FINAL_result)
+    present_reaction = json.loads(present_user.reaction)
+    present_reaction['time'][currentTime] = FINAL_result
     # model change and save
-    present_user.reaction = str(present_reaction)
+    present_user.reaction = str(present_reaction).replace("'", "\"")
     present_user.save()
