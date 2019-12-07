@@ -16,17 +16,16 @@ def analyze_view(request):
     template ='image.html'
     form = ImageForm(request.POST, request.FILES)
     if form.is_valid():
-
-      # get value of form
-      image = request.FILES['cover']
-      video = Video.objects.get(pk = form.data.get('video'))
-      user = READ_User.objects.get(username = form.data.get('user'))
-      currentTime = int(float(form.data.get('currentTime')) / 10)
-      path = 'images/' + form.data.get('path')
-      duration = form.data.get('duration')
-      
-      thread_analyze = Thread(target = analyze_image, args=(user, video, currentTime, path, image, duration, ))
-      thread_analyze.start()
+        # get value of form
+        image = request.FILES['cover']
+        video = Video.objects.get(pk = form.data.get('video'))
+        user = READ_User.objects.get(username = form.data.get('user'))
+        currentTime = int(float(form.data.get('currentTime')) / 10) - 1
+        if currentTime < 0: currentTime = 0
+        path = 'images/' + form.data.get('path')
+        duration = form.data.get('duration')
+        thread_analyze = Thread(target = analyze_image, args=(user, video, currentTime, path, image, duration, ))
+        thread_analyze.start()
     else:
         print(form)
         form = ImageForm()
@@ -37,5 +36,9 @@ def analyze_view(request):
     return render(request, template, context)
 
 def result(request):
+    user = READ_User.objects.get(username = request.session['user'])
+    video = Video.objects.get(id = request.session['video'])
+    present_user = User_Image.objects.get(user=user, video=video)
+
     # pass session data to template.
-    return render(request, 'analyze.html')
+    return render(request, 'analyze_result.html', {'reaction' : present_user.reaction})

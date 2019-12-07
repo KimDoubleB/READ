@@ -74,6 +74,11 @@ class VideoList(ListView):
     model = Video
     template_name = 'video.html'
     context_object_name = 'video_list'
+    
+    def get(self, request):
+        if 'video' in request.session:
+            del(request.session['video'])
+        return super(VideoList, self).get(request)
 
 # Login required
 class VideoDetail(DetailView):
@@ -101,6 +106,8 @@ class VideoWatch(View):
     template_name = 'video_watch.html'
 
     def get(self, request, pk):
+        self.request.session['video'] = pk
+
         #fetch video from DB by ID
         video = Video.objects.get(id=pk)
         username = self.request.session.get('user')
