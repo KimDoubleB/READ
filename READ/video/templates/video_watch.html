@@ -68,7 +68,7 @@
         </div>
         <script>
           var reaction = '{{ user_reaction.reaction }}';
-          obj = JSON.parse(reaction.replace(/&quot;/g,'"'));
+          var obj = JSON.parse(reaction.replace(/&quot;/g,'"'));
           var duration = obj.duration;
           var time = obj.time;
           var each_width = 100/duration;
