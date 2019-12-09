@@ -21,7 +21,7 @@ class SubscribeList(ListView):
     context_object_name = 'subscribe_list'
 
     def get_queryset(self, **kwargs):
-        queryset = Subscribe.objects.filter(user__username = self.request.session.get('user'))
+        queryset = Subscribe.objects.filter(user__user_id = self.request.session.get('user'))
         return queryset
 
 
@@ -34,7 +34,7 @@ class SubscribeCreate(FormView):
 
         subs = Subscribe(
             video = video,
-            user = READ_User.objects.get(username=self.request.session.get('user'))
+            user = READ_User.objects.get(user_id=self.request.session.get('user'))
         )
         subs.save()
         return super().form_valid(form)
@@ -68,7 +68,7 @@ class SubscribeListAPI(generics.GenericAPIView, mixins.ListModelMixin):
     /api/subscribe/
     '''
     def post(self, request, format=None):
-        # username과 video name을 받는다고 가정
+        # user_id과 video name을 받는다고 가정
         video = Video.objects.get(pk = request.data.get('video'))
         user = READ_User.objects.get(pk = request.data.get('user'))
         print(user)

@@ -19,7 +19,7 @@ def analyze_view(request):
         # get value of form
         image = request.FILES['cover']
         video = Video.objects.get(pk = form.data.get('video'))
-        user = READ_User.objects.get(username = form.data.get('user'))
+        user = READ_User.objects.get(user_id = form.data.get('user'))
         currentTime = int(float(form.data.get('currentTime')) / 10) - 1
         if currentTime < 0: currentTime = 0
         path = 'images/' + form.data.get('path')
@@ -36,7 +36,7 @@ def analyze_view(request):
     return render(request, template, context)
 
 def result(request):
-    user = READ_User.objects.get(username = request.session['user'])
+    user = READ_User.objects.get(user_id = request.session['user'])
     video = Video.objects.get(id = request.session['video'])
     
     if not User_Image.objects.filter(user=user, video=video).exists():

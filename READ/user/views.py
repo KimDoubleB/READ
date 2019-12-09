@@ -27,7 +27,7 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         user = User(
-            username = form.data.get('username'),
+            username = form.data.get('user_id'),
             password = make_password(form.data.get('password'))
         )
         user.save()
@@ -37,8 +37,10 @@ class RegisterView(FormView):
         # combine into one model or use foreign key.
         # Token --> API
         read_user = READ_User(
-            username = form.data.get('username'),
+            user_id = form.data.get('user_id'),
             password = make_password(form.data.get('password')),
+            name = form.data.get('name'),
+            gender = form.data.get('gender'),
             token = token
         )
         read_user.save()
@@ -53,7 +55,7 @@ class LoginView(FormView):
 
     def form_valid  (self, form):
         # session process.
-        self.request.session['user'] = form.data.get('username')
+        self.request.session['user'] = form.data.get('user_id')
         return super().form_valid(form)
 
 def logout(request):
@@ -65,19 +67,19 @@ def logout(request):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def register_API(request):
-    username = request.data.get("username")
+    user_id = request.data.get("user_id")
     password = request.data.get("password")
     re_password = request.data.get("re_password")
    
-    if username is None or password is None or re_password is None:
-        return Response({'error': 'Please provide both username and password'},
+    if user_id is None or password is None or re_password is None:
+        return Response({'error': 'Please provide both user_id and password'},
                         status=HTTP_400_BAD_REQUEST)
     if password != re_password:
         return Response({'error': 'Password is not same'},
                         status=HTTP_400_BAD_REQUEST)
 
     user = User(
-        username = username,
+        user_id = user_id,
         password = make_password(password)
         )
     user.save()
@@ -85,7 +87,7 @@ def register_API(request):
 
     # Custom model 저장
     read_user = READ_User(
-        username = username,
+        user_id = user_id,
         password = make_password(password),
         token = token
     )
@@ -99,21 +101,21 @@ def register_API(request):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def login_API(request):
-    username = request.data.get("username")
+    user_id = request.data.get("user_id")
     password = request.data.get("password")
    # image = request.data.get("cover")
 
-    if username is None or password is None:
-        return Response({'error': 'Please provide both username and password'},
+    if user_id is None or password is None:
+        return Response({'error': 'Please provide both user_id and password'},
                         status=HTTP_400_BAD_REQUEST)
     
-    user = authenticate(username=username, password=password)
+    user = authenticate(user_id=user_id, password=password)
 
     if not user:
         return Response({'error': 'Invalid Credentials'},
                         status=HTTP_404_NOT_FOUND)
     
-    read_user = READ_User.objects.get(username = username)
+    read_user = READ_User.objects.get(user_id = user_id)
     token = read_user.token
     return Response({'token': token},
                   #  {'cover':image},

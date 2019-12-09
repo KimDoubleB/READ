@@ -80,7 +80,7 @@ class VideoList(ListView):
     
     def get_context_data(self,**kwargs):
         context = super(VideoList, self).get_context_data(**kwargs)
-        context['user'] = READ_User.objects.get(username=self.request.session.get('user'))
+        context['user'] = READ_User.objects.get(user_id=self.request.session.get('user'))
         return context
 
     def get(self, request):
@@ -97,7 +97,7 @@ class VideoDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         self.request.session['video'] = context['video'].pk
-        user = READ_User.objects.get(username=self.request.session.get('user'))
+        user = READ_User.objects.get(user_id=self.request.session.get('user'))
         subs = Subscribe.objects.filter(user = user)
         context['visible'] = 1
 
@@ -115,8 +115,8 @@ class VideoWatch(View):
     def get(self, request, pk):
         #fetch video from DB by ID
         video = Video.objects.get(id=pk)
-        username = self.request.session.get('user')
-        user = READ_User.objects.get(username=username)
+        user_id = self.request.session.get('user')
+        user = READ_User.objects.get(user_id=user_id)
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         video.path = '/./get_video/'+video.path
 
@@ -125,7 +125,7 @@ class VideoWatch(View):
         else:
           user_reaction = User_Image.objects.get(user=user, video=video)
 
-        context = {'user':username, 'video':video, 'user_reaction':user_reaction}
+        context = {'user':user_id, 'video':video, 'user_reaction':user_reaction}
 
         return render(request, self.template_name, context)
 

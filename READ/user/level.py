@@ -7,7 +7,7 @@ def admin_required(function):
         if user is None or not user:
             return redirect('/login')
         
-        user = READ_User.objects.get(username=user)
+        user = READ_User.objects.get(user_id=user)
         if user.level != 'admin':
             return redirect('/') # go to the home.
         

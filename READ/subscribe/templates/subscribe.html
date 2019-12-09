@@ -52,7 +52,7 @@
                     {% for subscribe in subscribe_list %}
                     <tr>
                         <th scope="row">{{ subscribe.id }}</th>
-                        <th>{{ subscribe.user.username }}</th>
+                        <th>{{ subscribe.user.user_id }}</th>
                         <th><a href="/video/{{ subscribe.video.id }}/watch">{{ subscribe.video.name }}</th>
                         <th>{{ subscribe.register_date|date:'Y-m-d H:i' }}</th>
                     </tr>

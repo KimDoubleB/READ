@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 
 class RegisterForm(forms.Form):
-    username = forms.CharField(
+    user_id = forms.CharField(
         error_messages={
             'required':'아이디을 입력해주세요.'
         },
@@ -26,10 +26,26 @@ class RegisterForm(forms.Form):
         widget=forms.PasswordInput,
         label='비밀번호 확인'
     )
+    
+    name = forms.CharField(
+        error_messages={
+            'required':'이름을 입력해주세요.'
+        },
+        max_length=15,
+        label='이름'
+    )
+    
+    gender = forms.ChoiceField(
+        choices=(('M', 'Male'),('F', 'Female')),
+        error_messages={
+            'required':'성별을 선택해주세요.'
+        },
+        label='성별'
+    )
 
     def clean(self):
         cleaned_data = super().clean()
-        username = cleaned_data.get('username')
+        user_id = cleaned_data.get('user_id')
         password = cleaned_data.get('password')
         re_password = cleaned_data.get('re_password')
 
@@ -39,7 +55,7 @@ class RegisterForm(forms.Form):
            
 
 class LoginForm(forms.Form):
-    username = forms.CharField(
+    user_id = forms.CharField(
         error_messages={
             'required':'아이디를 입력해주세요.'
         },
@@ -57,12 +73,12 @@ class LoginForm(forms.Form):
     
     def clean(self):
         cleaned_data = super().clean()
-        username = cleaned_data.get('username')
+        user_id = cleaned_data.get('user_id')
         password = cleaned_data.get('password')
 
-        if username and password:
+        if user_id and password:
             try:
-                user = User.objects.get(username = username)
+                user = User.objects.get(username = user_id)
                 if not check_password(password, user.password):
                     self.add_error('password', '존재하지 않는 이메일이거나 비밀번호가 틀렸습니다.')
             except User.DoesNotExist:
