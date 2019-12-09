@@ -94,10 +94,9 @@ class VideoDetail(DetailView):
     queryset = Video.objects.all()
     context_object_name = 'video'
 
-    # OrderForm을 detail template에 전달해주는 곳
-    # 이렇게 detailView 내에 있는 함수인 get_content_data를 통해서 원하는 form을 또 전달할 수 있다.
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        self.request.session['video'] = context['video'].pk
         user = READ_User.objects.get(username=self.request.session.get('user'))
         subs = Subscribe.objects.filter(user = user)
         context['visible'] = 1
@@ -114,8 +113,6 @@ class VideoWatch(View):
     template_name = 'video_watch.html'
 
     def get(self, request, pk):
-        self.request.session['video'] = pk
-
         #fetch video from DB by ID
         video = Video.objects.get(id=pk)
         username = self.request.session.get('user')

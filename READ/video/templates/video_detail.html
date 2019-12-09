@@ -70,19 +70,10 @@
                         </form>
                     </li>
                 {% endifequal %}
-                    <!--             
-                |intcomma >>> 3자리마다 점찍혀서 숫자가 잘 보이도록 한다.
-                |safe >>> 데이터 자체가 html 코드로 바로 적용되서 보이도록
-                -> 즉, 이미지가 들어올 때, 이미지 태그가 보여지지 않고 이미지 태그가 html 코드로 적용되어 보여줘야하기 때문에 사용된다. 
-            -->
                     <li class="list-group-item">개수: {{ video.playlist|intcomma }} 개</li>
                     <li class="list-group-item">등록날짜: {{ video.register_date|date:'Y-m-d H:i' }}</li>
                     <li class="list-group-item">{{ video.description|safe }}</li>
                 </ul>
-            </div>
-            <p></p>
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-primary" onclick="location.href='./watch'">시청</button>
             </div>
             <p></p>
             <div class="d-flex justify-content-end">

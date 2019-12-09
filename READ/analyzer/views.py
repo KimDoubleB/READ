@@ -38,7 +38,11 @@ def analyze_view(request):
 def result(request):
     user = READ_User.objects.get(username = request.session['user'])
     video = Video.objects.get(id = request.session['video'])
-    present_user = User_Image.objects.get(user=user, video=video)
+    
+    if not User_Image.objects.filter(user=user, video=video).exists():
+        return redirect('/video/') # go to the video section.
+    else:
+        present_user = User_Image.objects.get(user=user, video=video)
 
-    # pass session data to template.
-    return render(request, 'analyze_result.html', {'reaction' : present_user.reaction})
+        # pass session data to template.
+        return render(request, 'analyze_result.html', {'reaction' : present_user.reaction})
