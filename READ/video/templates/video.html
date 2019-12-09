@@ -35,34 +35,36 @@
 <!--- Video list ---->
 <section id="video">
     <div class="container text-center">
-    <h3 class="title text-center">VIDEO</h3>
-    <br>
-    <div class="row mt-5">
-        <div class="col-12">
-            <table class="table table-light">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">비디오 제목</th>
-                        <th scope="col">개수</th>
-                        <th scope="col">등록날짜</th>
-                    </tr>
-                </thead>
-                <tbody class="text-dark">
-                    {% for video in video_list %}
-                    <tr>
-                        <th scope="row">{{ video.id }}</th>
-                        <th><a href="/video/{{ video.id }}">{{ video.name }}</a></th>
-                        <th>{{ video.playlist }} 개</th>
-                        <th>{{ video.register_date|date:'Y-m-d H:i' }}</th>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <h3 class="title text-center">VIDEO</h3>
+        <br>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table class="table table-light">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">비디오 제목</th>
+                            <th scope="col">개수</th>
+                            <th scope="col">등록날짜</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-dark">
+                        {% for video in video_list %}
+                        <tr>
+                            <th scope="row">{{ video.id }}</th>
+                            <th><a href="/video/{{ video.id }}">{{ video.name }}</a></th>
+                            <th>{{ video.playlist }} 개</th>
+                            <th>{{ video.register_date|date:'Y-m-d H:i' }}</th>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-    <br>
-    <button type="button" class="btn btn-primary" onclick="location.href='/video/create/'">Add video '접근권한수정필'</button>
+        {% ifequal user.level 'admin'%}
+            <br>
+            <button type="button" class="btn btn-primary" onclick="location.href='/video/create/'">Add video</button>
+        {% endifequal %}
     </div>
 </section>
 

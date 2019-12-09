@@ -5,6 +5,7 @@ from wsgiref.util import FileWrapper
 
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import HttpResponse, HttpResponseRedirect, View
 from django.views.generic.edit import FormView
@@ -18,6 +19,7 @@ from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED,
 from analyzer.models import User_Image
 from subscribe.forms import RegisterForm as SubscribeForm
 from subscribe.models import Subscribe
+from user.level import admin_required
 from user.models import READ_User
 
 from .forms import RegisterForm
@@ -25,6 +27,7 @@ from .models import Video
 from .serializers import VideoSerializer
 
 
+@method_decorator(admin_required, name='dispatch')
 class VideoCreate(View):
     template_name = 'register_video.html'
     def get(self, request):
@@ -75,6 +78,11 @@ class VideoList(ListView):
     template_name = 'video.html'
     context_object_name = 'video_list'
     
+    def get_context_data(self,**kwargs):
+        context = super(VideoList, self).get_context_data(**kwargs)
+        context['user'] = READ_User.objects.get(username=self.request.session.get('user'))
+        return context
+
     def get(self, request):
         if 'video' in request.session:
             del(request.session['video'])
@@ -90,8 +98,8 @@ class VideoDetail(DetailView):
     # 이렇게 detailView 내에 있는 함수인 get_content_data를 통해서 원하는 form을 또 전달할 수 있다.
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print('user', self.request.session.get('user'))
-        subs = Subscribe.objects.filter(user = READ_User.objects.get(username=self.request.session.get('user')))
+        user = READ_User.objects.get(username=self.request.session.get('user'))
+        subs = Subscribe.objects.filter(user = user)
         context['visible'] = 1
 
         for sub in subs:
@@ -99,7 +107,7 @@ class VideoDetail(DetailView):
                 context['visible'] = 0
                 break
 
-        context['form'] = SubscribeForm(self.request) # session 접근을 위해 request를 넘겨준다.        
+        context['form'] = SubscribeForm(self.request)
         return context
 
 class VideoWatch(View):

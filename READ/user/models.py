@@ -3,6 +3,11 @@ from django.db import models
 class READ_User(models.Model):
     username = models.CharField(max_length=128, verbose_name="아이디")
     password = models.CharField(max_length=128, verbose_name="비밀번호")
+    level = models.CharField(max_length=8, default='user',
+                             choices=(
+                                 ('admin', 'admin'),
+                                 ('user', 'user')
+                             ))
     token = models.CharField(max_length=128)
     register_date = models.DateTimeField(auto_now_add=True, verbose_name="등록날짜")
 
