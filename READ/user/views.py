@@ -17,8 +17,10 @@ from .models import READ_User
 
 @csrf_exempt
 def index(request):
-    # pass session data to template.
-    return render(request, 'index.html', {'name' : request.session.get('user') })
+    name = None
+    if READ_User.objects.filter(user_id=request.session.get('user')).exists():
+        name = READ_User.objects.get(user_id=request.session.get('user')).name
+    return render(request, 'index.html', {'name' : name })
 
 class RegisterView(FormView):
     template_name = 'register.html'

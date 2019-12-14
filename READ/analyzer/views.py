@@ -43,6 +43,7 @@ def result(request):
         return redirect('/video/') # go to the video section.
     else:
         present_user = User_Image.objects.get(user=user, video=video)
-
+        user_name = user.name
+        video_name = video.name
         # pass session data to template.
-        return render(request, 'analyze_result.html', {'reaction' : present_user.reaction})
+        return render(request, 'analyze_result.html', {'user_name' : user_name, 'video_name': video_name, 'reaction' : present_user.reaction})
