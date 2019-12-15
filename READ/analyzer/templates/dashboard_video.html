@@ -274,13 +274,10 @@
                   </div>
                   <div class="mt-4 text-center small">
                     <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> ?1
+                      <i class="fas fa-circle text-primary"></i> Concen O
                     </span>
                     <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> ?2
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> ?3
+                      <i class="fas fa-circle text-danger"></i> Concen X
                     </span>
                   </div>
                 </div>
@@ -328,7 +325,7 @@
 
   <script>
   var ctx = document.getElementById("myAreaChart");
-  var colors = ["#5B6777", "#5B6777", "#5B6777", "#F15628", "#5B6777"];
+  var colors = ["#4157fa", "#F15628", "#F15628"];
   var dataset1 = []
   {% for data in graph %}
   dataset1.push({
@@ -409,11 +406,11 @@ var dataset2 = {{ graph_pie }}
 var ratio_pie_chart = new Chart(ctx, {
   type: 'doughnut',
   data: {
-    labels: ["-3","-2","-1","0","1"],
+    labels: ["0","1","2"],
     datasets: [{
       data: dataset2,
-      backgroundColor: ["#5B6777", "#5B6777", "#5B6777", "#F15628", "#5B6777"],
-      hoverBackgroundColor: ["#5B6777", "#5B6777", "#5B6777", "#F15628", "#5B6777"]
+      backgroundColor: ["#4157fa", "#F15628", "#F15628"],
+      hoverBackgroundColor: ["#4157fa", "#F15628", "#F15628"]
     }],
   },
   options: {

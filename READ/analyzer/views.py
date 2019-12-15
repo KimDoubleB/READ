@@ -86,7 +86,7 @@ class DashboardVideoView(DetailView):
             reaction_df.loc[i] = reaction
         
         # fit to graph data
-        graph_data = pd.DataFrame([], columns=[-3,-2,-1, 0, 1])
+        graph_data = pd.DataFrame([], columns=[0,1,2])
         for time in reaction_df.columns:
             data = reaction_df.iloc[:, time].value_counts()
             graph_data = graph_data.append(data, ignore_index=True)
@@ -120,7 +120,7 @@ class DashboardUserView(DetailView):
             reaction = np.array(json_data['time'])
             
             # calculate ratio
-            ratio = np.count_nonzero(reaction == 1) / duration * 100
+            ratio = np.count_nonzero(reaction == 0) / duration * 100
             vids.append([obj.video.name, ratio])
             
         context.update({

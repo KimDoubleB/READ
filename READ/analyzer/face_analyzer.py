@@ -97,7 +97,7 @@ def get_gaze_ratio(eye_points, facial_landmarks, image, gray):
 def makeJson(duration):
   reaction = '{ "duration": ' + str(duration) + ', "time": ['
   for time_sec in range(duration):
-    reaction += '-1'
+    reaction += '2'
     if duration-1 != time_sec:
       reaction += ', '
     else:
@@ -202,7 +202,7 @@ def analyze_image(user, video, currentTime, path, image, duration):
         error = -3 # means "Get closer to your webcam" error
 
   if error < 0:
-    FINAL_result = error
+    FINAL_result = 2
   else:
     max_index = max([[dist([rect.left(), rect.top()], [rect.right(), rect.bottom()]), i] for (i, rect) in enumerate(rects)])[1]
     rect = rects[max_index]
