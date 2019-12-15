@@ -1,19 +1,20 @@
+import json
 from threading import Thread
 
+import numpy as np
+import pandas as pd
 from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, ListView
 
+from user.level import admin_required
 from user.models import READ_User
 from video.models import Video
 
 from .face_analyzer import analyze_image
 from .forms import ImageForm
 from .models import User_Image
-
-import json
-import numpy as np
-import pandas as pd
 
 
 @csrf_exempt
@@ -53,6 +54,7 @@ def result(request):
         # pass session data to template.
         return render(request, 'analyze_result.html', {'user_name' : user_name, 'video_name': video_name, 'reaction' : present_user.reaction})
 
+@method_decorator(admin_required, name='dispatch')
 class DashboardView(ListView):
     template_name = 'dashboard.html'
     context_object_name = 'user_list'
@@ -144,4 +146,3 @@ class DashboardUserView(DetailView):
 
     #     context['form'] = SubscribeForm(self.request)
     #     return context
-    
