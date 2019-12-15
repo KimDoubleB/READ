@@ -20,7 +20,7 @@ from django.urls import path
 from user.views import RegisterView, LoginView, index, logout, login_API, register_API
 from video.views import VideoCreate, VideoList, VideoDetail, VideoWatch, VideoFileView, VideoListAPI, VideoDetailAPI
 from subscribe.views import SubscribeCreate, SubscribeList, SubscribeListAPI
-from analyzer.views import analyze_view, result, new
+from analyzer.views import analyze_view, result, DashboardView, DashboardVideoView, DashboardUserView
 
 urlpatterns = [
     path('', index),
@@ -42,5 +42,7 @@ urlpatterns = [
     path('api/video/', VideoListAPI.as_view()),
     path('api/video/<int:pk>/', VideoDetailAPI.as_view()),
     path('api/subscribe/', SubscribeListAPI.as_view()),
-    path('new/', new),
+    path('dashboard/', DashboardView.as_view()),
+    path('dashboard/video/<int:pk>/', DashboardVideoView.as_view()),
+    path('dashboard/user/<int:pk>/', DashboardUserView.as_view()),
 ]
