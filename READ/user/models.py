@@ -14,6 +14,10 @@ class READ_User(models.Model):
                                  ('admin', 'admin'),
                                  ('user', 'user')
                              ))
+    job = models.CharField(max_length=30, verbose_name="직업")
+    place = models.CharField(max_length=30, verbose_name="학교/회사")
+    age = models.IntegerField(verbose_name="나이")
+
     token = models.CharField(max_length=128)
     register_date = models.DateTimeField(auto_now_add=True, verbose_name="등록날짜")
 

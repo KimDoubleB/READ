@@ -35,6 +35,29 @@ class RegisterForm(forms.Form):
         label='이름'
     )
     
+    age = forms.IntegerField(
+        error_messages={
+            'required':'나이를 입력해주세요.'
+        },
+        label='나이'
+    )
+    
+    job = forms.CharField(
+        error_messages={
+            'required':'직업을 입력해주세요.'
+        },
+        max_length=30,
+        label='직업'
+    )
+    
+    place = forms.CharField(
+        error_messages={
+            'required':'학교/회사를 입력해주세요.'
+        },
+        max_length=30,
+        label='학교/회사'
+    )
+    
     gender = forms.ChoiceField(
         choices=(('M', 'Male'),('F', 'Female')),
         error_messages={
@@ -48,7 +71,10 @@ class RegisterForm(forms.Form):
         user_id = cleaned_data.get('user_id')
         password = cleaned_data.get('password')
         re_password = cleaned_data.get('re_password')
-
+        job = cleaned_data.get('job')
+        place = cleaned_data.get('place')
+        age = cleaned_data.get('age')
+        
         if password and re_password:
             if password != re_password:
                 self.add_error('re_password', '비밀번호가 서로 다릅니다.')
