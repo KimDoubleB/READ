@@ -152,18 +152,21 @@ function toggleDataSeries(e) {
 <body>
 <h3 class="title text-center">RESULT</h3>
 <br>
+<br>
 
 <div id="main" style="margin-top:10px;">
 	<div class="container">
-    <h4 class="title text-center"><b>영상시간별 집중도</b></h4>
-    <div id="barchartContainer" style="height: 370px; width: 100%;"></div>
-
-    <br><br><br><br><br>
-
-    <h4 class="title text-center"><b>현재영상 집중도 비율</b></h4>
-    <div id="piechartContainer" style="height: 350px; width: 100%; border:2px;"></div>
-
-    <br><br><br><br>
+        <div class="jumbotron">
+            <h4 class="text-center"><span class="badge badge-primary">User</span> : <span class="badge badge-dark">{{ user_name }}</span></h3>
+            <h4 class="text-center"><span class="badge badge-primary">Video</span> : <span class="badge badge-dark">{{ video_name }}</span></h3>
+        </div>
+        <br><br>.
+        <h4 class="title text-center"><b>Concentration by time</b></h4>
+        <div id="barchartContainer" style="height: 370px; width: 100%;"></div>
+        <br><br><br><br><br>
+        <h4 class="title text-center"><b>Ratio</b></h4>
+        <div id="piechartContainer" style="height: 350px; width: 100%; border:2px;"></div>
+        <br><br><br><br>
 	</div>
 </div>
 
