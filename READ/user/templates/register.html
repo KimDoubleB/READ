@@ -40,7 +40,7 @@
                 </div>
                 <br><br>
                 <div class="col-12">
-                    <form method="POST" action="." onsubmit="return confirm('개인정보허용하시겠습니까? (temp message)');">
+                    <form method="POST" action="." onsubmit="return confirm('저희 플랫폼은 사용자의 개인정보(사진)을 이용합니다. 개인정보사용에 동의하십니까?');">
                         {% csrf_token %}
                         {% for field in form %}
                         {% ifequal field.label '성별' %}

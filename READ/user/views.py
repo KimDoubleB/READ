@@ -43,6 +43,9 @@ class RegisterView(FormView):
             password = make_password(form.data.get('password')),
             name = form.data.get('name'),
             gender = form.data.get('gender'),
+            age = form.data.get('age'),
+            job = form.data.get('job'),
+            place = form.data.get('place'),
             token = token
         )
         read_user.save()
