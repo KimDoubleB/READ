@@ -47,3 +47,6 @@ def result(request):
         video_name = video.name
         # pass session data to template.
         return render(request, 'analyze_result.html', {'user_name' : user_name, 'video_name': video_name, 'reaction' : present_user.reaction})
+
+def new(request):
+    return render(request, 'new.html')
