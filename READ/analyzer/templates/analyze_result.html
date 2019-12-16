@@ -52,7 +52,16 @@ for(var i = 0; i < time.length; i++){
         dataPoints: [{ y: 10 }]
       };
       break;
-    case 1, 2: // Don't concentrate
+    case 1: // Don't concentrate
+      graph_data[i] = {
+        type: "stackedBar",
+        color: "#F15628",
+        toolTipContent: "{label}<b>{name}:</b> {y}",
+        name: "Concen X",
+        dataPoints: [{ y: 10 }]
+      }
+      break;
+    case 2: // Don't concentrate
       graph_data[i] = {
         type: "stackedBar",
         color: "#F15628",
