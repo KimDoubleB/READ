@@ -42,6 +42,8 @@ def analyze_view(request):
     return render(request, template, context)
 
 def result(request):
+    if not('user' in request.session) or not('video' in request.session):
+        return redirect('/') # go to the home.
     user = READ_User.objects.get(user_id = request.session['user'])
     video = Video.objects.get(id = request.session['video'])
     
@@ -70,6 +72,7 @@ class DashboardView(ListView):
     def get_queryset(self):
         return READ_User.objects.order_by('name')
 
+@method_decorator(admin_required, name='dispatch')
 class DashboardVideoView(DetailView):
     template_name = 'dashboard_video.html'
     queryset = Video.objects.all()
@@ -106,6 +109,7 @@ class DashboardVideoView(DetailView):
         })   
         return context
 
+@method_decorator(admin_required, name='dispatch')
 class DashboardUserView(DetailView):
     template_name = 'dashboard_user.html'
     queryset = READ_User.objects.all()

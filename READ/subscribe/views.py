@@ -23,6 +23,11 @@ class SubscribeList(ListView):
     def get_queryset(self, **kwargs):
         queryset = Subscribe.objects.filter(user__user_id = self.request.session.get('user'))
         return queryset
+    
+    def get(self, request):
+        if 'video' in request.session:
+            del(request.session['video'])
+        return super(SubscribeList, self).get(request)
 
 
 class SubscribeCreate(FormView):
