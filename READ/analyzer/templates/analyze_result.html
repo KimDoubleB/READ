@@ -61,12 +61,21 @@ for(var i = 0; i < time.length; i++){
         dataPoints: [{ y: 10 }]
       }
       break;
-    case 2: // Don't concentrate
+    case 2: // Error
       graph_data[i] = {
         type: "stackedBar",
         color: "#F15628",
         toolTipContent: "{label}<b>{name}:</b> {y}",
         name: "Concen X",
+        dataPoints: [{ y: 10 }]
+      }
+      break;
+    case 3: // Default value (Playing X)
+      graph_data[i] = {
+        type: "stackedBar",
+        color: "#4f4f4f",
+        toolTipContent: "{label}<b>{name}:</b> {y}",
+        name: "Playing X",
         dataPoints: [{ y: 10 }]
       }
       break;
@@ -92,12 +101,12 @@ barchart.render();
 
 var counts = {};
 var sum_counts = duration;
-counts[0] = 0; counts[1] = 0; counts[2] = 0;
+counts[0] = 0; counts[1] = 0; counts[2] = 0; counts[3] = 0;
 for (var i = 0; i < time.length; i++) {
 		counts[time[i]] += 1;
 }
 
-for (var i = 0; i <= 2; i++) {
+for (var i = 0; i <= 3; i++) {
 		counts[i] = counts[i] / sum_counts * 100;
 }
 
@@ -110,7 +119,8 @@ var piechart = new CanvasJS.Chart("piechartContainer", {
     indexLabel: "{label} {y}",
     dataPoints: [
       {y: counts[0], label: "Concen O", color: "#4157fa"},
-      {y: counts[1] + counts[2], label: "Concen X", color: "#F15628"}
+      {y: counts[1] + counts[2], label: "Concen X", color: "#F15628"},
+      {y: counts[3], label: "Playing X", color: "#4f4f4f"}
     ]
   }]
 });

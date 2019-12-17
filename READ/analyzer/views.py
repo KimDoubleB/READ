@@ -88,7 +88,7 @@ class DashboardVideoView(DetailView):
             reaction_df.loc[i] = reaction
         
         # fit to graph data
-        graph_data = pd.DataFrame([], columns=[0,1,2])
+        graph_data = pd.DataFrame([], columns=[0,1,2,3])
         for time in reaction_df.columns:
             data = reaction_df.iloc[:, time].value_counts()
             graph_data = graph_data.append(data, ignore_index=True)

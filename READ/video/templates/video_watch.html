@@ -76,21 +76,17 @@
           for(var i = 0; i < time.length; i++){
             switch(time[i]){
               case 0: // Concentrate
-                temp += '<div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:' + each_width + '%; background-color:#1DC914 !important;"></div>';
+                temp += '<div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:' + each_width + '%; background-color:#4157fa !important;"></div>';
                 break;
               case 1: // Don't concentrate
-                temp += '<div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:' + each_width + '%; background-color:#FF4242 !important;"></div>';
+                temp += '<div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:' + each_width + '%; background-color:#F15628 !important;"></div>';
                 break;
-              case -1: // Detect Nothing
-                temp += '<div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:' + each_width + '%; background-color:#7A7A7A !important;"></div>';
+              case 2: // Error
+                temp += '<div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:' + each_width + '%; background-color:#F15628 !important;"></div>';
                 break;
-              case -2: // there ins't person
-                temp += '<div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:' + each_width + '%; background-color:#7A7A7A !important;"></div>';
+              case 3: // Default value (Not detected)
+                temp += '<div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:' + each_width + '%; background-color:#4f4f4f !important;"></div>';
                 break;
-              case -3: // need to closer to camera
-                temp += '<div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:' + each_width + '%; background-color:#C1C400 !important;"></div>';
-                break;
-
             }
           }
           document.getElementById('state').innerHTML = temp;

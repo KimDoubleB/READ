@@ -97,7 +97,7 @@ def get_gaze_ratio(eye_points, facial_landmarks, image, gray):
 def makeJson(duration):
   reaction = '{ "duration": ' + str(duration) + ', "time": ['
   for time_sec in range(duration):
-    reaction += '2'
+    reaction += '3'
     if duration-1 != time_sec:
       reaction += ', '
     else:
